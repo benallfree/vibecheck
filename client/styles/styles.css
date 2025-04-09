@@ -1,0 +1,63 @@
+@import 'tailwindcss';
+@plugin 'daisyui';
+
+.phone-notch::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 12px;
+  background: #1a1a1a;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.error-log {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.error-log.has-error {
+  opacity: 1;
+}
+
+#phoneContainer {
+  margin-top: 96px;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.phone-wrapper {
+  width: 393px;
+  height: 852px;
+  transform-origin: top left;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.phone-frame {
+  width: 393px;
+  height: 852px;
+}
+
+.phone-frame iframe {
+  width: 393px;
+  height: 852px;
+  border: none;
+}
+
+.scale-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.scale-display {
+  min-width: 4rem;
+  text-align: center;
+}

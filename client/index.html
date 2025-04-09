@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="Vibecheck - MMO Game Testing Tool - Test Multiple Players Simultaneously" />
+    <title>Vibecheck - MMO Testing Tool</title>
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Vibecheck - MMO Testing Tool" />
+    <meta property="og:url" content="<%=process.env.VITE_PUBLIC_URL%>" />
+    <meta
+      property="og:description"
+      content="Test your MMO games with multiple concurrent players in a single window. Perfect for multiplayer game development and debugging."
+    />
+    <meta property="og:image" content="<%=process.env.VITE_PUBLIC_URL%>/splash.jpg" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vibecheck - MMO Testing Tool" />
+    <meta
+      name="twitter:description"
+      content="Test your MMO games with multiple concurrent players in a single window. Perfect for multiplayer game development and debugging."
+    />
+    <meta name="twitter:image" content="<%=process.env.VITE_PUBLIC_URL%>/splash.jpg" />
+    <meta name="twitter:url" content="<%=process.env.VITE_PUBLIC_URL%>" />
+
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body class="bg-base-200 min-h-screen">
+    <div class="fixed top-0 left-0 right-0 bg-base-100 shadow-lg z-50">
+      <div class="container mx-auto p-4 flex gap-4 items-center">
+        <div class="flex items-center gap-2">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-primary"
+          >
+            <path
+              d="M12 3.5L14.5 8.5L20 9.5L16 13.5L17 19L12 16.5L7 19L8 13.5L4 9.5L9.5 8.5L12 3.5Z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span class="text-xl font-bold text-primary">Vibecheck</span>
+        </div>
+        <div class="divider divider-horizontal"></div>
+        <input
+          type="text"
+          id="urlInput"
+          placeholder="Enter MMO URL to test multiple players"
+          value="https://goodvibes.benallfree.com"
+          class="input input-bordered flex-1 max-w-md"
+        />
+        <button onclick="addPhone()" class="btn btn-primary">Add Player</button>
+        <button onclick="clearAll()" class="btn btn-ghost">Clear All</button>
+        <div class="scale-controls">
+          <button onclick="adjustScale(-0.1)" class="btn btn-sm">-</button>
+          <span id="scaleDisplay" class="scale-display">100%</span>
+          <button onclick="adjustScale(0.1)" class="btn btn-sm">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="phoneContainer" class="container mx-auto"></div>
+
+    <script>
+      let currentScale = 1.0
+
+      function adjustScale(delta) {
+        currentScale = Math.max(0.1, Math.min(1, currentScale + delta))
+        document.getElementById('scaleDisplay').textContent = Math.round(currentScale * 100) + '%'
+        updatePhoneScales()
+      }
+
+      function updatePhoneScales() {
+        const phones = document.getElementsByClassName('phone-wrapper')
+        Array.from(phones).forEach((phone) => {
+          phone.style.transform = `scale(${currentScale})`
+          phone.style.width = `${393 * currentScale}px`
+          phone.style.height = `${852 * currentScale}px`
+        })
+      }
+
+      function createPhoneFrame(url) {
+        const phoneWrapper = document.createElement('div')
+        phoneWrapper.className = 'phone-wrapper'
+        phoneWrapper.style.transform = `scale(${currentScale})`
+        phoneWrapper.style.width = `${393 * currentScale}px`
+        phoneWrapper.style.height = `${852 * currentScale}px`
+
+        const phoneDiv = document.createElement('div')
+        phoneDiv.className = 'relative phone-notch phone-frame'
+
+        // Phone frame with bezel effect
+        const frameOuter = document.createElement('div')
+        frameOuter.className = 'absolute inset-0 rounded-[2rem] bg-neutral shadow-xl'
+
+        const frameInner = document.createElement('div')
+        frameInner.className = 'absolute inset-[0.5rem] rounded-[1.5rem] bg-base-100 flex flex-col overflow-hidden'
+
+        const iframe = document.createElement('iframe')
+        iframe.src = url
+
+        const errorLog = document.createElement('div')
+        errorLog.className =
+          'error-log absolute -bottom-12 left-0 right-0 bg-error text-error-content p-2 text-sm rounded-lg truncate'
+
+        frameInner.appendChild(iframe)
+        frameOuter.appendChild(frameInner)
+        phoneDiv.appendChild(frameOuter)
+        phoneDiv.appendChild(errorLog)
+        phoneWrapper.appendChild(phoneDiv)
+
+        // Monitor console errors in the iframe
+        iframe.onload = () => {
+          const iframeWindow = iframe.contentWindow
+          const originalConsoleError = iframeWindow.console.error
+
+          iframeWindow.console.error = function (...args) {
+            errorLog.textContent = args.join(' ')
+            errorLog.classList.add('has-error')
+            originalConsoleError.apply(this, args)
+          }
+
+          iframeWindow.addEventListener('error', (event) => {
+            errorLog.textContent = `${event.message} (${event.filename}:${event.lineno})`
+            errorLog.classList.add('has-error')
+          })
+
+          iframeWindow.addEventListener('unhandledrejection', (event) => {
+            errorLog.textContent = `Unhandled Promise: ${event.reason}`
+            errorLog.classList.add('has-error')
+          })
+        }
+
+        return phoneWrapper
+      }
+
+      function addPhone() {
+        const url = document.getElementById('urlInput').value || 'index.html'
+        const container = document.getElementById('phoneContainer')
+        container.appendChild(createPhoneFrame(url))
+      }
+
+      function clearAll() {
+        const container = document.getElementById('phoneContainer')
+        container.innerHTML = ''
+      }
+
+      // Initialize with one phone
+      addPhone()
+    </script>
+  </body>
+</html>
