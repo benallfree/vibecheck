@@ -1,67 +1,57 @@
-# 🏝️ GoodVibes
+# Vibecheck - MMO Game Testing Tool
 
-Vibescale Three.js Game Starter Kit for Building Multiplayer Web Games
-
-https://github.com/user-attachments/assets/5bf9fdb7-186a-45ea-84f2-ea92c0aa0659
-
-📺 [Installation Walkthrough](https://x.com/benallfree/status/1909934375359381513)
+Vibecheck is a powerful testing tool designed for MMO (Massively Multiplayer Online) game developers that allows testing multiple concurrent players in a single window. It's perfect for multiplayer game development and debugging.
 
 ## Features
 
-- 🎮 Build Multiplayer Web Games Fast
-- 🌐 Real-time WebSocket Networking
-- 🚀 Cloudflare Edge Deployment
-- ⚡ Vite + TypeScript + Three.js
-- 🔌 Durable Objects for Game State
-- 📚 Comprehensive Documentation
+- 📱 Multiple Player Simulation: Test your MMO with multiple concurrent players in a single window
+- 🔍 Real-time Error Monitoring: Built-in console error tracking for each player instance
+- 📏 Adjustable Viewport Scaling: Easily resize player viewports to fit your screen
+- 🎮 Universal Compatibility: Works with any web-based MMO game
+- 🛠️ Developer-Friendly: Includes error logging and console monitoring for each player instance
 
 ## Getting Started
 
-### Development
+1. Open Vibecheck in your browser
+2. Enter your MMO game URL in the input field
+3. Click "Add Player" to create additional player instances
+4. Use the scaling controls (+/-) to adjust the viewport sizes
+5. Monitor console errors and game behavior across all instances
 
-```bash
-# Install dependencies
-bun i
+## Usage
 
-# Start client development server
-bun run --cwd client dev
+### Adding Players
 
-# Start server development
-bun run --cwd server dev
-```
+- Click the "Add Player" button to create a new player instance
+- Each player runs in an isolated environment with its own console and error tracking
 
-### Deployment
+### Managing Viewports
 
-```bash
-# Build the project
-bun run build
+- Use the "+" and "-" buttons to adjust viewport scaling
+- Scale ranges from 10% to 100%
+- Clear all players using the "Clear All" button
 
-# Deploy to Cloudflare
-bun run deploy
-```
+### Error Monitoring
 
-## Testing
+Each player instance includes:
 
-### MMO Testing Made Easy
+- Console error tracking
+- Unhandled promise rejection monitoring
+- Runtime error detection
+- Visual error indicators
 
-Test your multiplayer game interactions easily using [VibeCheck](https://vibecheck.benallfree.com) - a powerful testing tool that allows you to run multiple game clients simultaneously in iframes within a single browser window. This makes it simple to observe and debug real-time interactions between different players in your MMO game.
+## Development
 
-## Project Structure
+This project uses:
 
-```
-goodvibes/
-├── client/         # Frontend application
-├── server/         # Cloudflare Workers + Durable Objects
-└── shared/         # Shared types and utilities
-```
+- Vanilla JavaScript for core functionality
+- Tailwind CSS and DaisyUI for styling
+- Custom phone frame simulation for realistic testing
 
-## Tech Stack
+## Contributing
 
-- **Frontend**: Three.js, TypeScript, Vite
-- **Backend**: Cloudflare Workers, Durable Objects
-- **Package Manager**: Bun
-- **Deployment**: Cloudflare Pages
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Documentation
+## License
 
-The project includes comprehensive RAG (Retrieval-Augmented Generation) rules for maintaining and extending the codebase. These rules provide guidance for implementing features and following best practices.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
