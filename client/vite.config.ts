@@ -8,8 +8,27 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 
 config()
 
+// Custom plugin to handle url parameter
+const urlParamHandler = () => {
+  return {
+    name: 'url-param-handler',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        // Check if the request has a url parameter
+        const url = new URL(req.url, `http://${req.headers.host}`)
+        if (url.searchParams.has('url')) {
+          // If it does, we'll handle it specially
+          // This prevents Vite from trying to serve it as a file
+          req.url = req.url.replace('?url=', '?viteUrl=')
+        }
+        next()
+      })
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [tailwindcss(), ViteEjsPlugin(), imagetools(), ViteImageOptimizer()],
+  plugins: [tailwindcss(), ViteEjsPlugin(), imagetools(), ViteImageOptimizer(), urlParamHandler()],
   build: {
     target: 'esnext',
   },
@@ -23,5 +42,9 @@ export default defineConfig({
       },
     },
     allowedHosts: true,
+    middlewareMode: false,
+  },
+  optimizeDeps: {
+    exclude: ['@tailwindcss/vite'],
   },
 })

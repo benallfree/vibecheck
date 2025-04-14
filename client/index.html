@@ -62,7 +62,7 @@
           type="text"
           id="urlInput"
           placeholder="Enter MMO URL to test multiple players"
-          value="https://goodvibes.benallfree.com"
+          value=""
           class="input input-bordered flex-1 max-w-md"
         />
         <button onclick="addPhone()" class="btn btn-primary">Add Player</button>
@@ -78,6 +78,11 @@
     <div id="phoneContainer" class="container mx-auto"></div>
 
     <script>
+      // Get URL parameter if it exists
+      const urlParams = new URLSearchParams(window.location.search)
+      const defaultUrl = urlParams.get('url') || 'https://goodvibes.benallfree.com'
+      document.getElementById('urlInput').value = defaultUrl
+
       let currentScale = 1.0
 
       function adjustScale(delta) {
