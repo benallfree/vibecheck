@@ -12,6 +12,7 @@
     "ship:client": "bun run --cwd client ship"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.5",
     "@types/bun": "^1.2.17",
     "concurrently": "^9.2.0",
     "prettier": "^3.6.2",
